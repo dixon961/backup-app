@@ -8,7 +8,7 @@ services:
     # Переменные окружения для секретов
     environment:
       # Укажи здесь свой токен, это безопаснее чем в config.yml
-      - TELEGRAM_TOKEN=7223113612:AAFjnxyKhn_IE2AjkEmDLGxy2iMcGFSOgck
+      - TELEGRAM_TOKEN=12345678:AAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
       # Пароль для rclone, если он зашифрован
       # - RCLONE_CONFIG_PASS=your_rclone_password
     volumes:
