@@ -82,11 +82,12 @@ def main(task_name):
         logging.info(f"Загрузка '{archive_name}' в '{remote_name}:{remote_path}'...")
         rclone_cmd = [
             'rclone',
-            '-v',  # Добавляем подробный лог для отладки
+            '-v',  # Подробный лог для отладки
             '--config', RCLONE_CONFIG_PATH,
-            '--timeout', '1h',  # Увеличиваем общий таймаут до 1 часа
-            '--yandex-upload-cutoff', '256M', # Включаем потоковую загрузку для файлов > 256MB
-            '--yandex-chunk-size', '128M',    # Размер одного куска - 128MB
+            '--timeout', '1h',  # Общий таймаут на операцию
+            '--multi-thread-cutoff', '256M', # Использовать многопоточную загрузку для файлов > 256MB
+            '--multi-thread-chunk-size', '128M',    # Размер одного куска - 128MB
+            '--multi-thread-streams', '4',          # Использовать 4 потока
             'copy',
             local_archive_path,
             f'{remote_name}:{remote_path}'

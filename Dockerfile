@@ -1,11 +1,14 @@
 FROM python:3.10-slim
 
-# Устанавливаем системные зависимости: rclone, zip и cron
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    rclone \
     zip \
     cron \
+    curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем самую свежую версию rclone с помощью официального скрипта
+RUN curl https://rclone.org/install.sh | bash
 
 # Создаем директории
 WORKDIR /app
