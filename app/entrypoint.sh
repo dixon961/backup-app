@@ -4,9 +4,8 @@ set -e
 CRONTAB_FILE="/etc/cron.d/backup-cron"
 
 echo "Шаг 1: Подготовка переменных окружения для cron..."
-# Очищаем файл /etc/environment
+# Очищаем и заполняем /etc/environment для cron
 > /etc/environment
-# Записываем в него все переменные окружения, которые были переданы в контейнер
 printenv >> /etc/environment
 echo "Переменные окружения подготовлены."
 echo "---"
@@ -18,12 +17,12 @@ python3 /app/generate_crontab.py > "$CRONTAB_FILE"
 if [ -s "$CRONTAB_FILE" ]; then
     echo "Crontab успешно сгенерирован:"
     cat "$CRONTAB_FILE"
-    echo "---"
     chmod 0644 "$CRONTAB_FILE"
-    
-    echo "Шаг 3: Запуск cron в foreground режиме..."
-    exec cron -f
 else
-    echo "Crontab не был сгенерирован (конфиг пуст или отсутствует). Сервис в режиме ожидания."
-    exec tail -f /dev/null
+    echo "Crontab не был сгенерирован. Задачи по расписанию выполняться не будут."
 fi
+echo "---"
+
+# Шаг 3: Запуск Supervisord, который будет управлять cron и ботом
+echo "Запуск Supervisord..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
